@@ -65,6 +65,13 @@
                 <groupId>org.eclipse.jetty.ee10</groupId>
                 <artifactId>jetty-ee10-maven-plugin</artifactId>
                 <version>12.0.15</version>
+                <configuration>
+                    <!-- Defaults to 8081, not Tomcat's 8080, so a tester can run this dev
+                         shortcut and a real Tomcat deployment side by side without a port clash. -->
+                    <httpConnector>
+                        <port>8081</port>
+                    </httpConnector>
+                </configuration>
             </plugin>
         </plugins>
     </build>

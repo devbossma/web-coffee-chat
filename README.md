@@ -93,9 +93,13 @@ without setting up Tomcat first:
 mvn org.eclipse.jetty.ee10:jetty-ee10-maven-plugin:12.0.15:run-war
 ```
 
-Then open `http://localhost:8080/coffeeshop`. One thing to know: Jetty's plugin always deploys at
-the root path (`/`), so the URL here is shorter than the one below. That is only true of this
-dev-testing shortcut, not of a real deployment.
+Then open `http://localhost:8081/coffeeshop`. Two things to know, both only true of this
+dev-testing shortcut, not of a real deployment:
+- Jetty's plugin always deploys at the root path (`/`), so the URL here is shorter than the one
+  below.
+- It is configured in `pom.xml` to listen on port **8081**, not the usual 8080, specifically so it
+  does not collide with a real Tomcat instance also running on 8080 for the walkthrough below.
+  You can run both at the same time without either one fighting over the port.
 
 ### Running it the way the assignment describes, step by step
 
@@ -156,9 +160,9 @@ This app uses the `jakarta.servlet.*` namespace, which needs **Tomcat 10.1 or ne
    ~/tomcat10/bin/shutdown.sh       (Linux/macOS)
    ```
 
-If port 8080 is already taken (for instance by the Jetty shortcut above, or another Tomcat
-instance), startup will fail silently or log a bind error in `logs/catalina.<date>.log`, stop
-whatever is holding the port first.
+If port 8080 is already taken (for instance by another Tomcat instance, since the Jetty shortcut
+above was deliberately moved to 8081 to avoid exactly this), startup will fail silently or log a
+bind error in `logs/catalina.<date>.log`, stop whatever is holding the port first.
 
 ### Trying the barista side
 
