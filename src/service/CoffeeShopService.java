@@ -26,8 +26,11 @@ public class CoffeeShopService {
     public CoffeeShopService() {
         coffees = List.of(
                 new Coffee("Espresso", 2.50),
+                new Coffee("Americano", 2.75),
+                new Coffee("Macchiato", 3.25),
                 new Coffee("Cappuccino", 3.50),
-                new Coffee("Latte", 3.75));
+                new Coffee("Latte", 3.75),
+                new Coffee("Mocha", 4.00));
     }
 
     public List<Coffee> getCoffees() {

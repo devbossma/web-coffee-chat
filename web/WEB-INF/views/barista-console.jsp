@@ -5,45 +5,54 @@
 <head>
     <title>Barista console</title>
     <meta http-equiv="refresh" content="5">
-    <style>
-        body { font-family: sans-serif; max-width: 720px; margin: 40px auto; display: flex; gap: 24px; }
-        .sessions { width: 240px; }
-        .sessions a { display: block; padding: 6px; text-decoration: none; }
-        .sessions a.active { font-weight: bold; }
-        .transcript { border: 1px solid #ddd; padding: 10px; height: 240px; overflow-y: auto; flex: 1; }
-        .CUSTOMER { text-align: left; color: #0a5; }
-        .BARISTA { text-align: right; color: #333; }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<div class="sessions">
-    <h2>Active chats</h2>
-    <c:forEach var="session" items="${sessions}">
-        <a href="${pageContext.request.contextPath}/barista/console?sessionId=${session.id}"
-           class="${selectedSession != null && selectedSession.id == session.id ? 'active' : ''}">
-            #${session.id} - ${session.customerId} (order ${session.orderId})
-        </a>
-    </c:forEach>
-    <p><a href="${pageContext.request.contextPath}/barista/orders">Manage orders</a></p>
-</div>
+<div class="page">
+    <h1>Barista console</h1>
 
-<div style="flex:1;">
-    <c:if test="${selectedSession != null}">
-        <h2>Chat with ${selectedSession.customerId}</h2>
-        <div class="transcript">
-            <c:forEach var="message" items="${messages}">
-                <p class="${message.sender}"><strong>${message.sender}:</strong> ${message.text}</p>
+    <div class="console">
+        <div class="session-list">
+            <c:forEach var="session" items="${sessions}">
+                <a href="${pageContext.request.contextPath}/barista/console?sessionId=${session.id}"
+                   class="${selectedSession != null && selectedSession.id == session.id ? 'active' : ''}">
+                    #${session.id} &middot; ${session.customerId}<br>order ${session.orderId}
+                </a>
             </c:forEach>
+            <c:if test="${empty sessions}">
+                <p class="tagline">No active chats right now.</p>
+            </c:if>
         </div>
-        <form action="${pageContext.request.contextPath}/barista/console" method="post">
-            <input type="hidden" name="sessionId" value="${selectedSession.id}">
-            <input type="text" name="text" placeholder="Reply..." style="width: 70%;">
-            <input type="submit" value="Send">
-        </form>
-    </c:if>
-    <c:if test="${selectedSession == null}">
-        <p>Pick a chat on the left.</p>
-    </c:if>
+
+        <div class="console-chat">
+            <c:if test="${selectedSession != null}">
+                <div class="chat-card">
+                    <h3>${selectedSession.customerId}</h3>
+                    <div class="transcript">
+                        <c:forEach var="message" items="${messages}">
+                            <div class="bubble ${message.sender}">
+                                <span class="who">${message.sender}</span>${message.text}
+                            </div>
+                        </c:forEach>
+                    </div>
+                    <form class="chat-form" action="${pageContext.request.contextPath}/barista/console" method="post">
+                        <input type="hidden" name="sessionId" value="${selectedSession.id}">
+                        <input type="text" name="text" placeholder="Reply...">
+                        <button type="submit" class="btn">Send</button>
+                    </form>
+                </div>
+            </c:if>
+            <c:if test="${selectedSession == null}">
+                <p class="tagline">Pick a chat on the left.</p>
+            </c:if>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="${pageContext.request.contextPath}/barista/orders">Manage orders</a>
+    </div>
 </div>
 </body>
 </html>

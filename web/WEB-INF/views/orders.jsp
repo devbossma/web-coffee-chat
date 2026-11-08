@@ -4,30 +4,43 @@
 <html>
 <head>
     <title>Orders</title>
-    <style>
-        body { font-family: sans-serif; max-width: 560px; margin: 40px auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { text-align: left; padding: 6px; border-bottom: 1px solid #ddd; }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<h1>Current Orders</h1>
-<table>
-    <tr>
-        <th>Order ID</th>
-        <th>Customer ID</th>
-        <th>Coffee Type</th>
-        <th>Status</th>
-    </tr>
-    <c:forEach var="order" items="${orders}">
+<div class="page">
+    <h1>Pickup Board</h1>
+    <p class="tagline">Every order, live.</p>
+
+    <table class="board">
         <tr>
-            <td>${order.id}</td>
-            <td>${order.customerId}</td>
-            <td>${order.coffeeType}</td>
-            <td>${order.status}</td>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Coffee</th>
+            <th>Status</th>
         </tr>
-    </c:forEach>
-</table>
-<p><a href="${pageContext.request.contextPath}/coffeeshop">Back to Coffee Shop</a></p>
+        <c:forEach var="order" items="${orders}">
+            <tr>
+                <td>${order.id}</td>
+                <td>${order.customerId}</td>
+                <td>${order.coffeeType}</td>
+                <td><span class="status status-${order.status}">${order.status}</span></td>
+            </tr>
+        </c:forEach>
+    </table>
+
+    <div class="nav-links">
+        <a href="${pageContext.request.contextPath}/coffeeshop">Back to Coffee Shop</a>
+    </div>
+</div>
+
+<c:if test="${not empty sessionScope.chatSessionId}">
+    <a class="chat-fab" href="${pageContext.request.contextPath}/chat" title="Chat about your order">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4h16v12H7l-3 3V4z"/>
+        </svg>
+    </a>
+</c:if>
 </body>
 </html>

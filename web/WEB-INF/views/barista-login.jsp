@@ -4,25 +4,25 @@
 <html>
 <head>
     <title>Barista login</title>
-    <style>
-        body { font-family: sans-serif; max-width: 360px; margin: 80px auto; }
-        .error { color: #b00020; }
-        input[type=text], input[type=password] { width: 100%; padding: 6px; margin-bottom: 8px; }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<h1>Barista login</h1>
+<div class="page">
+    <h1>Barista login</h1>
 
-<c:if test="${not empty error}">
-    <p class="error">${error}</p>
-</c:if>
+    <c:if test="${not empty error}">
+        <p class="error">${error}</p>
+    </c:if>
 
-<form action="${pageContext.request.contextPath}/barista/login" method="post">
-    <label for="username">Username</label>
-    <input type="text" id="username" name="username">
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password">
-    <input type="submit" value="Log in">
-</form>
+    <form class="login-card" action="${pageContext.request.contextPath}/barista/login" method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password">
+        <button type="submit" class="btn">Log in</button>
+    </form>
+</div>
 </body>
 </html>
