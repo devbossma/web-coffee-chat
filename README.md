@@ -111,30 +111,37 @@ This app uses the `jakarta.servlet.*` namespace, which needs **Tomcat 10.1 or ne
 3. **Make sure `JAVA_HOME` is set** to a JDK 17 or newer install, Tomcat's startup scripts read
    it. Check with `echo %JAVA_HOME%` (Windows) or `echo $JAVA_HOME` (Linux/macOS); set it via your
    system's environment variables if it is empty.
-4. **Build the WAR:**
+4. **Set `CATALINA_HOME`** to the Tomcat folder from step 2, for example
+   `setx CATALINA_HOME "C:\tomcat10"` (Windows, then open a new terminal) or
+   `export CATALINA_HOME=~/tomcat10` (Linux/macOS). Tomcat's scripts can guess this on their own,
+   but only by looking at your terminal's *current directory*, not at where the script itself
+   lives, so running `C:\tomcat10\bin\shutdown.bat` from anywhere other than that exact `bin`
+   folder fails with `The CATALINA_HOME environment variable is not defined correctly`. Setting
+   it explicitly once avoids that regardless of where you run the scripts from.
+5. **Build the WAR:**
    ```bash
    git clone https://github.com/devbossma/web-coffee-chat.git
    cd web-coffee-chat
    mvn clean package
    ```
    This produces `target/coffee-shop-app.war`.
-5. **Drop the WAR into Tomcat's `webapps/` folder:**
+6. **Drop the WAR into Tomcat's `webapps/` folder:**
    ```
    copy target\coffee-shop-app.war C:\tomcat10\webapps\      (Windows)
    cp target/coffee-shop-app.war ~/tomcat10/webapps/         (Linux/macOS)
    ```
    Tomcat auto-deploys anything dropped into `webapps/`, using the filename as the context path,
    within a few seconds, no restart needed if Tomcat is already running.
-6. **Start Tomcat** (if it is not already running):
+7. **Start Tomcat** (if it is not already running):
    ```
    C:\tomcat10\bin\startup.bat      (Windows)
    ~/tomcat10/bin/startup.sh        (Linux/macOS)
    ```
-7. **Open the app:**
+8. **Open the app:**
    ```
    http://localhost:8080/coffee-shop-app/coffeeshop
    ```
-8. **Stop Tomcat** when done:
+9. **Stop Tomcat** when done:
    ```
    C:\tomcat10\bin\shutdown.bat     (Windows)
    ~/tomcat10/bin/shutdown.sh       (Linux/macOS)
