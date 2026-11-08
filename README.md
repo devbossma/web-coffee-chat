@@ -108,40 +108,49 @@ This app uses the `jakarta.servlet.*` namespace, which needs **Tomcat 10.1 or ne
    needs.
 2. **Extract it** somewhere simple, for example `C:\tomcat10` (Windows) or `~/tomcat10`
    (Linux/macOS). You should see `bin`, `webapps`, `conf`, and `logs` folders inside.
-3. **Make sure `JAVA_HOME` is set** to a JDK 17 or newer install, Tomcat's startup scripts read
-   it. Check with `echo %JAVA_HOME%` (Windows) or `echo $JAVA_HOME` (Linux/macOS); set it via your
-   system's environment variables if it is empty.
-4. **Set `CATALINA_HOME`** to the Tomcat folder from step 2, for example
-   `setx CATALINA_HOME "C:\tomcat10"` (Windows, then open a new terminal) or
-   `export CATALINA_HOME=~/tomcat10` (Linux/macOS). Tomcat's scripts can guess this on their own,
-   but only by looking at your terminal's *current directory*, not at where the script itself
-   lives, so running `C:\tomcat10\bin\shutdown.bat` from anywhere other than that exact `bin`
-   folder fails with `The CATALINA_HOME environment variable is not defined correctly`. Setting
-   it explicitly once avoids that regardless of where you run the scripts from.
-5. **Build the WAR:**
+3. **Set `JAVA_HOME` and `CATALINA_HOME` as persistent environment variables, not just for your
+   current session.** Tomcat's startup/shutdown scripts can guess both on their own, but only by
+   looking at your terminal's *current directory*, not at where the script itself lives or where
+   Java is actually installed. So running them from anywhere other than Tomcat's own `bin` folder
+   fails with one of:
+   ```
+   Neither the JAVA_HOME nor the JRE_HOME environment variable is defined
+   The CATALINA_HOME environment variable is not defined correctly
+   ```
+   Set both once, permanently, and this stops mattering:
+   ```
+   setx JAVA_HOME "C:\Program Files\Java\jdk-21"     (Windows, then open a NEW terminal)
+   setx CATALINA_HOME "C:\tomcat10"                  (Windows, then open a NEW terminal)
+
+   export JAVA_HOME=/path/to/your/jdk                (Linux/macOS, add to ~/.bashrc or ~/.zshrc)
+   export CATALINA_HOME=~/tomcat10                   (Linux/macOS, add to ~/.bashrc or ~/.zshrc)
+   ```
+   `setx` only updates the variable for terminals opened after you run it, your current window
+   still has the old (empty) value, so close it and open a fresh one before continuing.
+4. **Build the WAR:**
    ```bash
    git clone https://github.com/devbossma/web-coffee-chat.git
    cd web-coffee-chat
    mvn clean package
    ```
    This produces `target/coffee-shop-app.war`.
-6. **Drop the WAR into Tomcat's `webapps/` folder:**
+5. **Drop the WAR into Tomcat's `webapps/` folder:**
    ```
    copy target\coffee-shop-app.war C:\tomcat10\webapps\      (Windows)
    cp target/coffee-shop-app.war ~/tomcat10/webapps/         (Linux/macOS)
    ```
    Tomcat auto-deploys anything dropped into `webapps/`, using the filename as the context path,
    within a few seconds, no restart needed if Tomcat is already running.
-7. **Start Tomcat** (if it is not already running):
+6. **Start Tomcat** (if it is not already running):
    ```
    C:\tomcat10\bin\startup.bat      (Windows)
    ~/tomcat10/bin/startup.sh        (Linux/macOS)
    ```
-8. **Open the app:**
+7. **Open the app:**
    ```
    http://localhost:8080/coffee-shop-app/coffeeshop
    ```
-9. **Stop Tomcat** when done:
+8. **Stop Tomcat** when done:
    ```
    C:\tomcat10\bin\shutdown.bat     (Windows)
    ~/tomcat10/bin/shutdown.sh       (Linux/macOS)
