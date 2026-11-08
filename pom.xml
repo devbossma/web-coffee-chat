@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.saberlabs</groupId>
+    <artifactId>coffee-shop-app</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
+        <jstl.version>3.0.1</jstl.version>
+    </properties>
+
+    <dependencies>
+        <!-- Provided by the servlet container (Tomcat 10.1+ / Jetty 12 EE10) at runtime. -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSTL (<c:forEach> etc. in the JSPs). The implementation is NOT bundled with Tomcat,
+             so it is pulled in at compile scope and shipped inside WEB-INF/lib by the WAR plugin. -->
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>coffee-shop-app</finalName>
+        <!-- Non-standard layout on purpose: the assignment's own structure puts packages directly
+             under src/ (no src/main/java) and the webapp root under web/ (no src/main/webapp). -->
+        <sourceDirectory>src</sourceDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <warSourceDirectory>web</warSourceDirectory>
+                    <failOnMissingWebXml>true</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <!-- For local smoke-testing only ("mvn jetty:ee10:run"): Jetty 12's EE10 module
+                 understands the jakarta.servlet 6.x namespace this app is built against, so it
+                 can run the WAR straight from the source tree without a separate Tomcat install.
+                 The real deployment target is still "package as a WAR, drop it into Tomcat", per
+                 the assignment. -->
+            <plugin>
+                <groupId>org.eclipse.jetty.ee10</groupId>
+                <artifactId>jetty-ee10-maven-plugin</artifactId>
+                <version>12.0.15</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
