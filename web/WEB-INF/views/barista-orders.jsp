@@ -49,6 +49,7 @@
 
     <div class="nav-links">
         <a href="${pageContext.request.contextPath}/barista/console">Back to chat console</a>
+        <a href="${pageContext.request.contextPath}/barista/logout">Log out</a>
     </div>
 </div>
 </body>

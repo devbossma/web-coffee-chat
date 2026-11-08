@@ -52,6 +52,7 @@
 
     <div class="nav-links">
         <a href="${pageContext.request.contextPath}/barista/orders">Manage orders</a>
+        <a href="${pageContext.request.contextPath}/barista/logout">Log out</a>
     </div>
 </div>
 </body>

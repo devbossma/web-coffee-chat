@@ -43,12 +43,30 @@
     <!-- Barista-facing -->
 
     <servlet>
+        <servlet-name>BaristaRootController</servlet-name>
+        <servlet-class>controller.BaristaRootController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BaristaRootController</servlet-name>
+        <url-pattern>/barista</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>BaristaLoginController</servlet-name>
         <servlet-class>controller.BaristaLoginController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>BaristaLoginController</servlet-name>
         <url-pattern>/barista/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BaristaLogoutController</servlet-name>
+        <servlet-class>controller.BaristaLogoutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BaristaLogoutController</servlet-name>
+        <url-pattern>/barista/logout</url-pattern>
     </servlet-mapping>
 
     <servlet>
