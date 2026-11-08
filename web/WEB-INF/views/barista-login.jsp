@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<div class="page">
-    <h1>Barista login</h1>
-
-    <c:if test="${not empty error}">
-        <p class="error">${error}</p>
-    </c:if>
-
+<div class="page login-page">
     <form class="login-card" action="${pageContext.request.contextPath}/barista/login" method="post">
+        <h1>Barista login</h1>
+
+        <c:if test="${not empty error}">
+            <p class="error">${error}</p>
+        </c:if>
+
         <label for="username">Username</label>
         <input type="text" id="username" name="username">
         <label for="password">Password</label>
