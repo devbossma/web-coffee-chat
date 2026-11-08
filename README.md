@@ -97,25 +97,60 @@ Then open `http://localhost:8080/coffeeshop`. One thing to know: Jetty's plugin 
 the root path (`/`), so the URL here is shorter than the one below. That is only true of this
 dev-testing shortcut, not of a real deployment.
 
-### Running it the way the assignment describes
+### Running it the way the assignment describes, step by step
 
-Install **Tomcat 10.1 or newer** (this app uses the `jakarta.servlet.*` namespace, which needs
-Tomcat 10.1+ / Jakarta EE 10, not an older `javax.servlet` Tomcat 9), drop
-`target/coffee-shop-app.war` into `<tomcat>/webapps/`, start Tomcat, and open:
+This app uses the `jakarta.servlet.*` namespace, which needs **Tomcat 10.1 or newer** (Jakarta EE
+10). An older Tomcat 9, which still speaks `javax.servlet`, will not load it.
 
-```
-http://localhost:8080/coffee-shop-app/coffeeshop
-```
+1. **Get Tomcat.** Download the **Core / 64-bit Windows zip** (or the plain Core `.zip` on
+   Linux/macOS) from `https://tomcat.apache.org/download-10.cgi`, a 10.1.x release. Skip the
+   Windows installer `.exe`, it installs Tomcat as a background service, which is more than this
+   needs.
+2. **Extract it** somewhere simple, for example `C:\tomcat10` (Windows) or `~/tomcat10`
+   (Linux/macOS). You should see `bin`, `webapps`, `conf`, and `logs` folders inside.
+3. **Make sure `JAVA_HOME` is set** to a JDK 17 or newer install, Tomcat's startup scripts read
+   it. Check with `echo %JAVA_HOME%` (Windows) or `echo $JAVA_HOME` (Linux/macOS); set it via your
+   system's environment variables if it is empty.
+4. **Build the WAR:**
+   ```bash
+   git clone https://github.com/devbossma/web-coffee-chat.git
+   cd web-coffee-chat
+   mvn clean package
+   ```
+   This produces `target/coffee-shop-app.war`.
+5. **Drop the WAR into Tomcat's `webapps/` folder:**
+   ```
+   copy target\coffee-shop-app.war C:\tomcat10\webapps\      (Windows)
+   cp target/coffee-shop-app.war ~/tomcat10/webapps/         (Linux/macOS)
+   ```
+   Tomcat auto-deploys anything dropped into `webapps/`, using the filename as the context path,
+   within a few seconds, no restart needed if Tomcat is already running.
+6. **Start Tomcat** (if it is not already running):
+   ```
+   C:\tomcat10\bin\startup.bat      (Windows)
+   ~/tomcat10/bin/startup.sh        (Linux/macOS)
+   ```
+7. **Open the app:**
+   ```
+   http://localhost:8080/coffee-shop-app/coffeeshop
+   ```
+8. **Stop Tomcat** when done:
+   ```
+   C:\tomcat10\bin\shutdown.bat     (Windows)
+   ~/tomcat10/bin/shutdown.sh       (Linux/macOS)
+   ```
 
-Tomcat auto-deploys any WAR dropped into `webapps/` using its filename as the context path, so
-that URL works as soon as the file lands there.
+If port 8080 is already taken (for instance by the Jetty shortcut above, or another Tomcat
+instance), startup will fail silently or log a bind error in `logs/catalina.<date>.log`, stop
+whatever is holding the port first.
 
 ### Trying the barista side
 
-Go to `/barista/login` and sign in with `barista` / `coffee123`, the one hardcoded credential
-pair this app ships with. From there, `/barista/console` shows every open chat and lets you reply
-to any of them, and `/barista/orders` is where an order actually moves from `PLACED` to `PAID` to
-`FULFILLED`.
+Go to `/barista` (it redirects to `/barista/login` if you are not signed in yet, or straight to
+the console if you already are) and sign in with `barista` / `coffee123`, the one hardcoded
+credential pair this app ships with. From there, `/barista/console` shows every open chat and
+lets you reply to any of them, `/barista/orders` is where an order actually moves from `PLACED`
+to `PAID` to `FULFILLED`, and `/barista/logout` (also linked from both pages) signs you back out.
 
 ### Known things worth knowing before you go looking for them as bugs
 
